@@ -10,20 +10,26 @@ $resourceGroup = New-AzResourceGroup -Name $rg -Location $location
 
 Write-Output "Name of RG is $($resourceGroup.ResourceGroupName)"
 
-$keyVaultName = $rgName + "-kv"
-$keyVault = New-AzKeyVault -VaultName $keyVaultName -ResourceGroupName $rg -Location $location
-
-Write-Output "Name of KV is $($keyVault.VaultName)"
 
 
 New-AzResourceGroupDeployment -Name ExampleDeployment -ResourceGroupName $rg `
     -TemplateParameterFile $param `
     -TemplateFile $tmplt 
 
+$parameters = Get-Content $param | ConvertFrom-Json
+
+./New-UserChromeO365.ps1 -rgname $rg -vmname $parameters.parameters.virtualMachineName.value
+
 <#
 
 ## to remove just created rg
 Remove-AzResourceGroup -Name $resourceGroup.ResourceGroupName
+
+## KeyVault require some work
+$keyVaultName = $rgName + "-kv"
+$keyVault = New-AzKeyVault -VaultName $keyVaultName -ResourceGroupName $rg -Location $location
+Write-Output "Name of KV is $($keyVault.VaultName)"
+
 
 
 New-AzDeployment -Name ExampleDeployment `

@@ -79,9 +79,6 @@
         "adminUsername": {
             "value": "CStest01"
         },
-        "adminPassword": {
-            "value": "adminPassword!!!ljkshljhws"
-        },
         "patchMode": {
             "value": "AutomaticByOS"
         }

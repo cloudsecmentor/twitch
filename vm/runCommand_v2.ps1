@@ -1,7 +1,11 @@
 
+param (
+  $pass,
+  $Username = "csmUser01"
+)
+
 ### new login user
-$Password = ConvertTo-SecureString "Vd8d1uzi!Q2w3e" -AsPlainText -force
-$Username = "sbTST02"
+$Password = ConvertTo-SecureString $pass -AsPlainText -force
 New-LocalUser $Username -Password $Password -FullName $Username -Description $Username
 Add-LocalGroupMember -Group "Administrators" -Member $Username
 
