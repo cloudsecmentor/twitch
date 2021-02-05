@@ -14,6 +14,7 @@ Write-Output "Name of RG is $($resourceGroup.ResourceGroupName)"
 $parameters = Get-Content $param | ConvertFrom-Json
 $password = ("!@#$%^&*0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz".tochararray() | sort --random-sort )[0..15] -join ''
 
+# ideally, you should push the password to a keyvault
 Write-Output "Password: $password"
 
 $parameters.parameters.adminPassword.value = $password
