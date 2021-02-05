@@ -1,15 +1,16 @@
 
 param (
   $pass,
-  $Username = "csmUser01"
+  $username = "csmUser01"
 )
 
 ### new login user
 $Password = ConvertTo-SecureString $pass -AsPlainText -force
-New-LocalUser $Username -Password $Password -FullName $Username -Description $Username
-Add-LocalGroupMember -Group "Administrators" -Member $Username
+New-LocalUser $username -Password $Password -FullName $username -Description $username
+Add-LocalGroupMember -Group "Administrators" -Member $username
 
 Write-Host "New user created"
+Write-Output "User: $username Password: $password"
 
 
 #### Chrome install
