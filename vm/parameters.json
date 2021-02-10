@@ -23,7 +23,7 @@
             "protocol": "TCP",
             "access": "Allow",
             "direction": "Inbound",
-            "sourceAddressPrefix": "*",
+            "sourceAddressPrefix": "85.24.133.215",
             "sourcePortRange": "*",
             "destinationAddressPrefix": "*",
             "destinationPortRange": "3389"
@@ -68,7 +68,7 @@
       "value": "CStest01"
     },
     "virtualMachineRG": {
-      "value": "vm08-rg"
+      "value": "TBC"
     },
     "osDiskType": {
       "value": "Premium_LRS"
