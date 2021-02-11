@@ -23,10 +23,7 @@ $parameters.parameters.virtualMachineRG.value = $rg
 $myip = (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content
 $parameters.parameters.networkSecurityGroupRules.value[0].properties.sourceAddressPrefix = $myip
 
-$RDPtext = "full address:s:"+ $myip + ":3389`n"
-$RDPtext += "username:s:" + $parameters.parameters.adminUsername.value + "`npassword:s:" + $password
 
-$RDPtext | Out-File -FilePath "../../access.rdp"
 # if there is no such attribute as adminPassword
 #$pass = @{value = $password}   
 #$parameters.parameters  | Add-Member -MemberType NoteProperty -Name 'adminPassword' -Value $pass   
@@ -39,7 +36,19 @@ New-AzResourceGroupDeployment -Name ExampleDeployment -ResourceGroupName $rg `
     -TemplateParameterFile $param `
     -TemplateFile $tmplt 
 
-#./Invoke-AzRC-UserChromeO365.ps1 -rgname $rg -vmname $parameters.parameters.virtualMachineName.value
+#/Invoke-AzRC-UserChromeO365.ps1 -rgname $rg -vmname $parameters.parameters.virtualMachineName.value
+
+# Create RDP file
+$RDPtext = "full address:s:" + `
+  (Get-AzPublicIpAddress -Name $parameters.parameters.publicIpAddressName.value).IpAddress + `
+  ":3389`n"
+$RDPpass = ($password | ConvertTo-SecureString -AsPlainText -Force) | ConvertFrom-SecureString
+$RDPtext += "username:s:" + $parameters.parameters.adminUsername.value + "`n"
+$RDPtext += "password:s:" + $password + "`n"
+$RDPtext += "password 51:b:" + $RDPpass + "`n"
+
+$RDPtext | Out-File -FilePath "../../access.rdp"
+
 
 #change password back to TBC
 $parameters.parameters.adminPassword.value = "TBC"

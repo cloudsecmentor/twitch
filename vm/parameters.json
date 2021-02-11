@@ -23,7 +23,7 @@
             "protocol": "TCP",
             "access": "Allow",
             "direction": "Inbound",
-            "sourceAddressPrefix": "85.24.133.215",
+            "sourceAddressPrefix": "TBC",
             "sourcePortRange": "*",
             "destinationAddressPrefix": "*",
             "destinationPortRange": "3389"
