@@ -2,7 +2,8 @@ param (
   $param = "parameters.json",
   $tmplt = "template.json",
   $rgName = "vm07",
-  $location = "eastus"
+  $location = "eastus",
+  $installExtras = $true
   )
 
 $rg = $rgName + "-rg"
@@ -36,18 +37,23 @@ New-AzResourceGroupDeployment -Name ExampleDeployment -ResourceGroupName $rg `
     -TemplateParameterFile $param `
     -TemplateFile $tmplt 
 
-#/Invoke-AzRC-UserChromeO365.ps1 -rgname $rg -vmname $parameters.parameters.virtualMachineName.value
+
+if ($installExtras) {
+  ./Invoke-AzRC-UserChromeO365.ps1 -rgname $rg -vmname $parameters.parameters.virtualMachineName.value
+}
+    
 
 # Create RDP file
 $RDPtext = "full address:s:" + `
-  (Get-AzPublicIpAddress -Name $parameters.parameters.publicIpAddressName.value).IpAddress + `
+  (Get-AzPublicIpAddress -Name $parameters.parameters.publicIpAddressName.value -ResourceGroupName $rg).IpAddress + `
   ":3389`n"
 $RDPpass = ($password | ConvertTo-SecureString -AsPlainText -Force) | ConvertFrom-SecureString
 $RDPtext += "username:s:" + $parameters.parameters.adminUsername.value + "`n"
 $RDPtext += "password:s:" + $password + "`n"
 $RDPtext += "password 51:b:" + $RDPpass + "`n"
 
-$RDPtext | Out-File -FilePath "../../access.rdp"
+
+$RDPtext | Out-File -FilePath "../../access-$rg-$($parameters.parameters.virtualMachineName.value).rdp"
 
 
 #change password back to TBC
